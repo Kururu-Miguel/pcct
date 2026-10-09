@@ -25,7 +25,6 @@ def carregar_dados():
 
 dados, tabela_cotas = carregar_dados()
 
-sl.badge('')
 
 sl.title('Notas de corte dos processos seletivos do IFAM')
 campus = sl.selectbox('Campus', dados.keys())

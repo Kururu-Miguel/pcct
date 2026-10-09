@@ -1490,6 +1490,23 @@ snowflake = ["snowflake-connector-python (>=3.3.0)", "snowflake-snowpark-python[
 sql = ["SQLAlchemy (>=2.0.0)"]
 
 [[package]]
+name = "streamlit-scroll-navigation"
+version = "1.2.2"
+description = "Streamlit component for scroll-based page navigation."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "streamlit_scroll_navigation-1.2.2-py3-none-any.whl", hash = "sha256:4e8c785f9accf3e634ee4a1fa995c7d65e7172a054b687f0aa1dffa3101d6273"},
+    {file = "streamlit_scroll_navigation-1.2.2.tar.gz", hash = "sha256:32968c48a1a149b7c1cb458eaa3b72a575c1acfc274157a39607bd04866e87b9"},
+]
+
+[package.dependencies]
+streamlit = ">=1.0"
+
+[package.extras]
+devel = ["setuptools (>=42)", "twine", "wheel"]
+
+[[package]]
 name = "tenacity"
 version = "9.1.4"
 description = "Retry code until it succeeds"
@@ -1735,4 +1752,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "5bb401055ffc359715b5d43eaa2e23078c7ebc2497678fc82ec91c83432a45fc"
+content-hash = "a57476e7b405f37384ba5339f1217840958c779be182eb8a20bc8bbd92fa8d18"

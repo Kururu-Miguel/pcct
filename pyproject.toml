@@ -11,6 +11,7 @@ matplotlib = "^3.11.1"
 pandas = "^3.0.5"
 streamlit = "^1.61.1"
 openpyxl = "^3.1.5"
+streamlit-scroll-navigation = "^1.2.2"
 
 
 [build-system]
