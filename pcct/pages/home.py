@@ -1,29 +1,10 @@
-from pathlib import Path
 import streamlit as sl
 import pandas as pd
 import altair as alt
+from utils.dados import carregar_dados
 
 
-caminho_dados = Path(__file__).parent.parent.parent.resolve() / 'dados' #Pega o caminho absoluto da pasta dos dados
-
-
-@sl.cache_data
-def carregar_dados():
-    dados_manaus = pd.read_excel(caminho_dados / 'dados_manaus.xlsx', sheet_name=None) # o sheet_none serve pra ler todas as páginas do arquivo, sem o parâmetro ia ler só o 0, seria o primeiro campus.
-    dados_maues = pd.read_excel(caminho_dados / 'dados_maues.xlsx')
-
-    dados = dados_manaus.copy()
-    dados['MAUES'] = dados_maues.copy()
-
-    for k in dados.keys():
-        dados[k].columns = dados[k].columns.str.lower()
-
-    tabela_cotas = pd.read_excel(caminho_dados / 'tabela_cotas.xlsx').set_index('Nova')['Antiga'].to_dict()
-
-    return dados, tabela_cotas
-
-
-dados, tabela_cotas = carregar_dados()
+dados, tabela_cotas = carregar_dados()[:2]
 
 
 sl.title('Notas de corte dos processos seletivos do IFAM')
@@ -80,7 +61,9 @@ maior = valores_curso['maior nota'].iloc[0]
 menor = valores_curso['menor nota'].iloc[0]
 maior_universal = valores['maior nota'].max()
 menor_universal = valores['menor nota'].min()
-
+amplitude = (maior - menor).round(2)
+maxima = (media + amplitude).round(2) if (media + amplitude) <= 10 else 10
+minima = (media - amplitude).round(2)
 
 dados_tempo = dados[campus].query('cota == @cota').copy()
 dados_tempo['nota de corte'] = pd.to_numeric(dados_tempo['nota de corte'], errors='coerce')
@@ -90,7 +73,7 @@ dados_tempo['ano'] = dados_tempo['ano'].str.split('-').str[1]
 
 sl.subheader('Informações sobre o curso selecionado')
 
-col1, col2 = sl.columns(2)
+col1, col2, col3, col4 = sl.columns(4)
 
 with col1:
     sl.metric(
@@ -107,6 +90,18 @@ with col2:
         help='Amplitude é a diferença entre a maior e menor nota, representa o quanto a nota de corte do ano atual pode variar tanto para cima quanto para baixo'
     )
 
+with col3:
+    sl.metric(
+        'Nota de corte máxima',
+        maxima
+    )
+
+with col4:
+    sl.metric(
+        'Nota de corte mínima',
+        minima
+    )
+
 
 graf_barras_vertical = alt.Chart(valores).mark_bar(clip=True).encode(
     x = alt.X(
@@ -115,12 +110,17 @@ graf_barras_vertical = alt.Chart(valores).mark_bar(clip=True).encode(
         axis = alt.Axis(
             labelAngle = 0,
             title = 'Curso'
-        )
+        ),
     ),
 
     y = alt.Y(
         'media:Q',
         title = 'Nota de corte média',
+    ),
+
+    color = alt.Color(
+        'curso:N',
+        legend = None
     )
 )
 
@@ -139,6 +139,11 @@ graf_barras_horizontal = alt.Chart(valores).mark_bar(clip=True).encode(
         'media:Q',
         title = 'Nota de corte média',
         scale = alt.Scale(domain=[menor_universal*0.90, maior_universal*1.05])
+    ),
+
+    color = alt.Color(
+        'curso:N',
+        legend = None
     )
 )
 
@@ -182,3 +187,7 @@ with sl.expander('Estatísticas para nerds'):
     sl.caption('Gráfico de linhas mostrando as médias das notas de corte ao decorrer dos anos')
     graf_retas
 
+
+sl.caption('''---
+[![Dev](https://img.shields.io/badge/Dev-Kururu--Miguel-blue?logo=github)](https://github.com/Kururu-Miguel)'''
+)
