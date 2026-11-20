@@ -6,6 +6,7 @@ from utils.dados import carregar_dados
 
 dados, tabela_cotas = carregar_dados()[:2]
 
+sl.caption('Essa ferramenta tem o intuito de mostrar a nota de corte provável de determinador campus, curso e cota.\nSelecione o campus, curso e cota que planeja ingressar para verificar a nota de corte provável.')
 
 sl.title('Notas de corte dos processos seletivos do IFAM')
 campus = sl.selectbox('Campus', dados.keys())
