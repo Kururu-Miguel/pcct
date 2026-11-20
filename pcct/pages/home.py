@@ -72,6 +72,7 @@ dados_tempo['ano'] = dados_tempo['ano'].str.split('-').str[1]
 
 
 sl.subheader('Informações sobre o curso selecionado')
+sl.caption('Em caso de dúvidas sobre o que cada coisa significa, clique na interrogação ao lado do campo. É um botão de ajuda')
 
 col1, col2, col3, col4 = sl.columns(4)
 
@@ -93,13 +94,15 @@ with col2:
 with col3:
     sl.metric(
         'Nota de corte máxima',
-        maxima
+        maxima,
+        help='Nota de corte máxima representa o maior valor possível da nota de corte. se a sua nota é maior que isso muito provavelmente você irá passar nesse curso, campi e cota sem problemas.'
     )
 
 with col4:
     sl.metric(
         'Nota de corte mínima',
-        minima
+        minima,
+        help='Nota de corte mínima representa o valor mais baixo possível da nota de corta. Se a sua nota é menor que ela, é melhor considerar outro curso, campi e/ou cota.'
     )
 
 
